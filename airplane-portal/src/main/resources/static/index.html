@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<link href="DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="DataTables/js/jquery.dataTables.js"></script>
+<link href="bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="bootstrap-datetimepicker/js/moment-with-locales.js"></script>
+<script src="bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<link href="bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="bootstrap-fileinput/js/locales/zh.js"></script>
+<link href="bootstrapValidator/css/bootstrapValidator.min.css" rel="stylesheet">
+<script src="bootstrapValidator/js/bootstrapValidator.min.js"></script>
+<body>
+<style>
+    .abc{
+        display: none;
+    }
+</style>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">航空管理系统</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li id="dlname"></li>
+                <li ><a href="#"></a></li>
+                <li><a href="#"></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        条件查询
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="selectform" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">航班名称:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="name" placeholder="请输入用户名">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">起飞时间:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="starttime" placeholder="请输入用户名">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">机票类型:</label>
+                            <div class="col-sm-9">
+                                <input type="radio" name="typeid" value="1">经济舱
+                                <input type="radio" name="typeid" value="2">头等舱
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否有票:</label>
+                            <div class="col-sm-9">
+                                <input type="radio" name="idticket" value="0">有
+                                <input type="radio" name="idticket" value="1">无
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">机型大小:</label>
+                            <div class="col-sm-9">
+                                <input type="radio" name="type" value="1">大型机
+                                <input type="radio" name="type" value="2">中型机
+                                <input type="radio" name="type" value="3">小型机
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label  class="col-sm-4 control-label">机型:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="typename">
+                                    <option value="">-请选择-</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">出发城市:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="startareaid">
+                                    <option value="">-请选择-</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label  class="col-sm-4 control-label">到达城市:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="endareaid">
+                                    <option value="">-请选择-</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div style="padding-left:120px">
+                        <button type="button" onclick="search()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>查询
+                        </button>
+                        &nbsp;
+                        <button type="reset" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-refresh"></span>重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">航班列表</div>
+    <div class="panel-body">
+        <div style="margin-bottom:10px">
+
+            <button type="button" onclick="addFlight()" class="btn btn-primary abc">
+                <span class="glyphicon glyphicon-minus"></span>添加
+            </button>
+            <button type="button" onclick="plsc()" class="btn btn-danger abc">
+                <span class="glyphicon glyphicon-minus"></span>批量删除
+            </button>
+            <button type="button" onclick="plsc()" class="btn btn-danger abc">
+                <span class="glyphicon glyphicon-minus"></span>导出excel
+            </button>
+        </div>
+        <table id="aa" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th><input type="checkbox" onclick="qx(this)"></th>
+                <th>航班姓名</th>
+                <th>起飞时间</th>
+                <th>到达时间</th>
+                <th>票数</th>
+                <th>票价</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div id="adddiv" style="display:none">
+    <form class="form-horizontal" id="addform">
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">航班姓名：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="addname" oninput="selectname(this)"/>
+            </div>
+            <div></div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">起飞时间：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="addstarttime" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">到达时间：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="addendtime"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">机型：</label>
+            <div class="col-sm-4">
+                <select class="form-control"  id="addtypeid">
+                    <option value="">-请选择-</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="addstart1">
+            <label  class="col-sm-2 control-label">出发机场：</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="addstartArea1" onchange="three(this)">
+                    <option value="">-请选择-</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" id="addend1">
+            <label  class="col-sm-2 control-label">到达机场：</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="addendArea1" onchange="three(this)">
+                    <option value="">-请选择-</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">机票：</label>
+            <div class="col-sm-3">
+                <select class="form-control">
+                    <option value="">-请选择-</option>
+                    <option value="1">经济舱</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <span>数量：</span><input type="text" name="addtotalcount1" class="form-control">
+            </div>
+            <div class="col-sm-2">
+                价格：<input type="text" name="addprice1" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label"></label>
+            <div class="col-sm-3">
+                <select class="form-control">
+                    <option value="">-请选择-</option>
+                    <option value="2">头等舱</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" name="addtotalcount2" class="form-control">
+            </div>
+            <div class="col-sm-2">
+                <input type="text" name="addprice2" class="form-control">
+            </div>
+        </div>
+    </form>
+
+</div>
+<div id="updatediv" style="display:none">
+    <form class="form-horizontal" id="updateform">
+        <input type="hidden" id="updateid">
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div  class="col-sm-4"><b><font size="5">航班信息</font></b></div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">航班：</label>
+            <div class="col-sm-8" id="planename">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">起飞时间：</label>
+            <div class="col-sm-8" id="starttimestr">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">到达时间：</label>
+            <div class="col-sm-8" id="endtimestr">
+            </div>
+        </div>
+        <div class="form-group" id="updatejobdiv">
+            <label  class="col-sm-4 control-label">乘机人：</label>
+            <div class="col-sm-4">
+            </div>
+        </div>
+        <div class="row bbb">
+            <div class="orderitem">
+        <div class="col-sm-3">
+            <label  class="col-sm-4 control-label">票型</label>
+            <div class="col-sm-8">
+                <select class="form-control tickettype" id="updateleaderid" onchange="updateprice(this)">
+                    <option value="">-请选择-</option>
+                    <option value="1">经济舱</option>
+                    <option value="2">头等舱</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label  class="col-sm-4 control-label">价格</label>
+            <div class="col-sm-8">
+                <input type="text" ticketid="" readonly class="form-control price">
+            </div>
+        </div>
+        <div class="form-group col-sm-3">
+            <label  class="col-sm-6 control-label">乘机人</label>
+            <div class="col-sm-6">
+                <input type="text"  class="form-control realname">
+            </div>
+        </div>
+        <div class="form-group col-sm-3">
+            <label  class="col-sm-3 control-label">身份证</label>
+            <div class="col-sm-7">
+                <input type="text"  class="form-control idcard">
+            </div>
+            <div class="col-sm-2">
+                <input type="button"  class="form-control" value="+" onclick="insert()">
+            </div>
+        </div>
+            </div>
+</div>
+        <div class="row bbb"></div>
+        <div class="row bbb"></div>
+        <div>
+            总人数：<span id="person"></span>,总票价：<span id="totalprice"></span>
+        </div>
+        <div style="margin-left:600px">
+            <button type="button" onclick="confirm()" class="btn btn-primary">
+                <span class="glyphicon glyphicon-minus"></span>去结算
+            </button>
+            <button type="button" onclick="cancel()" class="btn btn-danger">
+                <span class="glyphicon glyphicon-minus"></span>取消
+            </button>
+        </div>
+    </form>
+
+</div>
+
+</body>
+
+<script>
+
+    function qx(a){
+        $("[name=pl]").each(function(){
+            this.checked=a.checked;
+        })
+    }
+var count=0;
+   function insert(){
+       count++;
+         var abcd=" <div class=\"orderitem\">"+
+             "        <div class=\"col-sm-3\">\n" +
+             "            <label  class=\"col-sm-4 control-label\">票型</label>\n" +
+             "            <div class=\"col-sm-8\">\n" +
+             "                <select class=\"form-control tickettype\" id=\"updateleaderid\" onchange=\"updateprice(this)\">\n" +
+             "                    <option value=\"\">-请选择-</option>\n" +
+             "                    <option value=\"1\">经济舱</option>\n" +
+             "                    <option value=\"2\">头等舱</option>\n" +
+             "                </select>\n" +
+             "            </div>\n" +
+             "        </div>\n" +
+             "        <div class=\"col-sm-3\">\n" +
+             "            <label  class=\"col-sm-4 control-label\">价格</label>\n" +
+             "            <div class=\"col-sm-8\">\n" +
+             "                <input type=\"text\" readonly ticketid=\"\" class=\"form-control price\">\n" +
+             "            </div>\n" +
+             "        </div>\n" +
+             "        <div class=\"form-group col-sm-3\">\n" +
+             "            <label  class=\"col-sm-6 control-label\">乘机人</label>\n" +
+             "            <div class=\"col-sm-6\">\n" +
+             "                <input type=\"text\"  class=\"form-control realname\">\n" +
+             "            </div>\n" +
+             "        </div>\n" +
+             "        <div class=\"form-group col-sm-3\">\n" +
+             "            <label  class=\"col-sm-3 control-label\">身份证</label>\n" +
+             "            <div class=\"col-sm-7\">\n" +
+             "                <input type=\"text\"  class=\"form-control idcard\">\n" +
+             "            </div>\n" +
+             "            <div class=\"col-sm-2\">\n" +
+             "                <input type=\"button\"  class=\"form-control\" value=\"+\" onclick=\"insert()\">\n" +
+             "            </div>\n" +
+             "        </div>\n"
+         +"</div>";
+         if(count<3){
+             $(".bbb").eq(count).append(abcd);
+         }else{
+             alert("最多添加3位");
+         }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+<script>
+    function selectname(a){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectname",
+            data:{"name":a.value},
+            success:function(data){
+                if(data.code==200){
+                   if(data.data==1){
+                       $(a).parent().next().html("<font color='red'>航班名不能重复</font>")
+                   }else if(data.data==2){
+                       $(a).parent().next().html("");
+                   }
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+
+    function selectType(){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectType",
+            success:function(data){
+                if(data.code==200){
+                    for(var i=0;i<data.data.length;i++){
+                        $("#addtypeid").append("<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>")
+                    }
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectCity",
+            success:function(data){
+                if(data.code==200){
+                    for(var i=0;i<data.data.length;i++){
+                        $("#addstartArea1").append("<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>");
+                        $("#addendArea1").append("<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>");
+                    }
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+
+    function three(a){
+        var lavel;
+        if(a){
+            $(a).parent().nextAll().remove();
+            lavel=$(a).parent().prevAll().length;
+        }
+        if(lavel<3){
+            $.ajax({
+                dataType:"json",
+                type:"post",
+                url:"http://localhost:8888/selectCityByPid",
+                data:{"pid":a.value},
+                success:function(data){
+                    if(data.code==200){
+                        var selecthtml="<div class='col-sm-3'><select onchange='three(this)' class='form-control'><option value=\"\">-请选择-</option>";
+                        for(var i=0;i<data.data.length;i++){
+                            selecthtml+="<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+                        }
+                        selecthtml+="</select></div>";
+                       $(a).parent().parent().append(selecthtml);
+                    }else{
+                        alert("添加失败");
+                    }
+                }
+            })
+
+        }
+
+    }
+
+var addform;
+ function addFlight(){
+    addform=$("#adddiv").html();
+        initdate("addstarttime",1);
+        initdate("addendtime",1);
+        selectType();
+        bootbox.confirm({
+            title:"<b><font color='red'>添加员工</font></b>",
+            message:$("#adddiv").children(),
+            buttons:{
+                confirm:{
+                    label:"确定",
+                    className:"btn btn-primary"
+                },
+                cancel:{
+                    label:"取消",
+                    className:"btn btn-danger"
+                }
+            },
+            callback:function(data){
+                if(data){
+                    var flight={};
+                    flight.name =$("[name=addname]").val();
+                    flight.starttime=$("[name=addstarttime]").val();
+                    flight.endtime=$("[name=addendtime]").val();
+                    flight.typeid=$("#addtypeid").val();
+                    flight.startterminalid=$("#addstart1 select").eq(2).val();
+                    flight.endterminalid=$("#addend1 select").eq(2).val();
+                    var ticketList=[];
+                    var ticket1={};
+                    ticket1.type=1;
+                    ticket1.totalcount=$("[name=addtotalcount1]").val();
+                    ticket1.price=$("[name=addprice1]").val();
+                    ticketList.push(ticket1);
+                    var ticket2={};
+                    ticket2.type=2;
+                    ticket2.totalcount=$("[name=addtotalcount2]").val();
+                    ticket2.price=$("[name=addprice2]").val();
+                    ticketList.push(ticket2);
+                    var flightinfo={};
+                    flightinfo.flight=flight;
+                    flightinfo.ticketList=ticketList;
+                    $.ajax({
+                        type:"post",
+                        url:"http://localhost:8888/addFlight",
+                        data:JSON.stringify(flightinfo),
+                        dataType:"json",
+                        contentType:"application/json;charset=utf-8",
+                        success:function(data){
+                             if(data.code==200){
+                                 search();
+                             }
+                        }
+                    })
+
+
+                }
+                $("#adddiv").html(addform);
+            }
+
+        })
+
+
+
+
+
+
+    }
+
+
+</script>
+
+
+
+
+
+<script src="common.js"></script>
+<script>
+
+    function isdl(){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/isdl",
+            success:function(data){
+                if(data.code==200){
+                    if(data.data=="管理员"){
+                       $(".abc").show();
+                    }else{
+                        $("[name=buybtn]").show();
+                    }
+                        $("#dlname").html("<font color='#ff4500' size='6px'>"+data.data+",欢迎登录</font>");
+                }else{
+                    $("#dlname").html("<a href=\"login.html\">登录</a>");
+                }
+            }
+        })
+    }
+
+
+
+    var selecttable;
+    $(function(){
+        pageselect();
+        initselect();
+        isdl();
+    })
+
+
+    function search(){
+        selecttable.ajax.reload();
+    }
+
+    function initdate(a,b){
+        $("[name="+a+"]").datetimepicker({
+            format:b==undefined?"YYYY-MM-DD HH:mm:ss":"YYYY-MM-DD",
+            locale:"zh-CN",
+            showClear:true
+        })
+    }
+
+    function initselect(){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectType",
+            success:function(data){
+                if(data.code==200){
+                    for(var i=0;i<data.data.length;i++){
+                        $("#typename").append("<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>")
+                    }
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectCity",
+            success:function(data){
+                if(data.code==200){
+                    for(var i=0;i<data.data.length;i++){
+                        $("#startareaid").append("<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>")
+                        $("#endareaid").append("<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>")
+                    }
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+
+    function pageselect(){
+        selecttable=$("#aa").DataTable({
+            serverSide:true,
+            processing:true,
+            language:{
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            searching:false,
+            ordering:false,
+            ajax:{
+                url:"http://localhost:8888/pageselect",
+                type:"post",
+                contentType:"application/json",
+                async:false,
+                data:function(d){
+                   d.name=$("[name=name]").val();
+                   d.starttime=$("[name=starttime]").val();
+                   d.typeid=$("[name=typeid]:checked").val();
+                   d.idticket=$("[name=idticket]:checked").val();
+                   d.type=$("[name=type]:checked").val();
+                   d.typename=$("#typename").val();
+                   d.startareaid=$("#startareaid").val();
+                   d.endareaid=$("#endareaid").val();
+                   return JSON.stringify(d);
+                },
+                dataSrc: function (json) {
+                    json.draw = json.data.draw;
+                    json.recordsTotal = json.data.recordsTotal;
+                    json.recordsFiltered = json.data.recordsFiltered;
+                    //json.data=json.data.data;
+                    return json.data.data;
+                }
+            },
+            columns:[
+                {data:"id","render":function (data) {
+                        return "<input type=checkbox name=\"pl\" value=\""+data+"\">";
+                    }},
+                {data:"planename"},
+                {data:"starttimestr"},
+                {data:"endtimestr"},
+                {data:"ticketList",render:function(data){
+                        if(data.length>0){
+                            var totalcount=0;
+                            for(var i=0;i<data.length;i++){
+                                totalcount+=data[i].totalcount;
+                            }
+                            return totalcount;
+                        }else{
+                            return "";
+                        }
+
+                    }},
+                {data:"ticketList",render:function(data){
+                        if(data.length>0){
+                            var minprice=data[0].price;
+                            for(var i=0;i<data.length;i++){
+                                if(minprice>data[i].price){
+                                    minprice=data[i].price;
+                                }
+                            }
+                            var typeid=$("[name=typeid]:checked").val();
+                            if(typeid==undefined||typeid==1){
+                                return minprice;
+                            }else if(typeid==2){
+                                if(data[0].price==minprice){
+                                    return data[1].price;
+                                }else{
+                                    return data[0].price;
+                                }
+                            }
+
+                        }else{
+                            return "";
+                        }
+
+                    }},
+
+                {data:"id",
+                width:"15%"
+                ,
+                    "render":function(data){
+                        return '<div class="btn-group btn-group-xs">'+
+                            '<button type="button" name="buybtn" onclick="buy('+data+')" class="btn btn-danger" style="display: none">'+
+                            '<span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;购票'+
+                            '</button>'+
+                            '</div>';
+                    }}
+            ]
+
+
+
+        })
+
+    }
+
+
+
+
+
+</script>
+
+<script>
+    var dialog;
+    var updatediv;
+    function buy(id){
+        inittoken();
+        updatediv=$("#updatediv").html();
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            data:{id:id},
+            url:"http://localhost:8888/selectFlightById",
+            success:function(data){
+                if(data.code==200){
+                    var airplane=data.data;
+                 $("#planename").html(airplane.planename);
+                 $("#starttimestr").html(airplane.starttimestr);
+                 $("#endtimestr").html(airplane.endtimestr);
+                 $("#updateid").val(airplane.id);
+              dialog=bootbox.dialog({
+                     size:"large",
+                     title:"购票页面",
+                     message:$("#updatediv form"),
+                  closeButton:false
+                 })
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+
+    function updateprice(a){
+        if(a.value==""){
+            $(a).parent().parent().next().find(":text").val("");
+            $(a).parent().parent().next().find(":text").attr("ticketid","");
+            return;
+        }
+        var flightid=$("#updateid").val();
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            data:{flightid:flightid,type:a.value},
+            url:"http://localhost:8888/updateprice",
+            success:function(data){
+                if(data.code==200){
+                   $(a).parent().parent().next().find(":text").val(data.data.price);
+                    $(a).parent().parent().next().find(":text").attr("ticketid",data.data.id);
+                   var person=0;
+                   var price=0;
+                   $(".bbb").find(".price").each(function(){
+                       person++;
+                       price+=Number(this.value);
+                   })
+                    $("#person").html(person);
+                   $("#totalprice").html(price);
+
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+
+    }
+
+    function confirm(){
+        var orderinfo={};
+        orderinfo.flightid=$("#updateid").val();
+        orderinfo.totalcount=$("#person").html();
+        orderinfo.totalprice=$("#totalprice").html();
+       var orderItemList=[];
+        $(".orderitem").each(function(){
+            var orderitem={};
+           var tickettype=$(this).find(".tickettype").val();
+           if(tickettype==""){
+               alert("请先选择票型");
+               return;
+           }
+           var price=$(this).find(".price").val();
+           var ticketid=$(this).find(".price").attr("ticketid");
+           var realname=$(this).find(".realname").val();
+            if(realname==""){
+                alert("请先填写乘机人");
+                return;
+            }
+            var idcard=$(this).find(".idcard").val();
+            if(idcard==""){
+                alert("请先填写身份证");
+                return;
+            }
+            orderitem.tickettype=tickettype;
+            orderitem.price=price;
+            orderitem.realname=realname;
+            orderitem.idcard=idcard;
+            orderitem.ticketid=ticketid;
+            orderItemList.push(orderitem);
+        })
+        orderinfo.orderItemList=orderItemList;
+        $.ajax({
+            beforeSend:function(request){
+                request.setRequestHeader("abc",token);
+                var abc=sessionStorage.getItem("token");
+                if(abc==null){
+                    request.setRequestHeader("token","");
+                }else{
+                    request.setRequestHeader("token",abc);
+                }
+            },
+            type:"post",
+            url:"http://localhost:8888/addOrder",
+            data:JSON.stringify(orderinfo),
+            dataType:"json",
+            contentType:"application/json;charset=utf-8",
+            success:function(data){
+
+                if(data.code==200){
+                   if(orderItemList.length==data.data.length){
+                       alert("所有人员都未订票成功");
+                       inittoken();
+                       return;
+                   }
+
+                    var str="";
+                    if(data.data.length>0){
+                        for (var i = 0; i <data.data.length; i++) {
+                            str+=data.data[i].realname+"未订票成功\n";
+                        }
+                        alert(str);
+                    }
+
+                    location.href="order.html";
+                }
+            }
+        })
+
+
+    }
+var token;
+    function inittoken(){
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8888/inittoken",
+            dataType:"json",
+            success:function(data){
+                if(data.code==200){
+                    token=data.data;
+                }
+            }
+        })
+    }
+
+
+
+
+    function cancel(){
+        dialog.modal("hide");
+        count=0;
+        $("#updatediv").html(updatediv);
+    }
+</script>
+
+
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<script src="common.js"></script>
+<script src="qrcode.min.js"></script>
+<body>
+<div class="payment">
+    <!-- 微信支付 -->
+    <div>
+        <div style="margin-left: 500px"><font color="red" size="30px">微信支付</font></div>
+        <div>
+            <div id="timediv" style="display:none;top: -36px;margin-left: 500px;">距二维码过期还有<span id="timespan2">120</span>S<a href="javascript:getWeixinImage2();">刷新</a>页面重新获取二维码。</div>
+            <div >
+                <div id="weixinImageUrl" style="margin-left: 500px">
+                </div>
+                <div class="pw-retry j_weixiRetry" style="display: none;">
+                    <a class="ui-button ui-button-gray j_weixiRetryButton" href="javascript:getWeixinImage2();">获取失败 点击重新获取二维码  </a>
+                </div>
+                <div class="pw-box-ft" style="margin-left: 500px">
+                    <p>请使用微信扫一扫</p>
+                    <p>扫描二维码支付</p>
+                </div>
+            </div>
+            <div class="p-w-sidebar"></div>
+        </div>
+    </div>
+    <!-- 微信支付 end -->
+    <!-- payment-change 变更支付方式 -->
+    <div class="payment-change" style="margin-left: 500px">
+        <a class="pc-wrap" onclick="window.history.go(-1)">
+            <i class="pc-w-arrow-left">&lt;</i>
+            <strong>选择其他支付方式</strong>
+        </a>
+    </div>
+    <!-- payment-change 变更支付方式 end -->
+</div>
+</body>
+<script>
+    $(function(){
+        pay();
+    })
+    function pay(){
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8888/pay",
+            dataType:"json",
+            success:function(result){
+                if(result.code==513){
+                    location.href="login.html";
+                }
+                if(result.code==200){
+                    new QRCode(document.getElementById("weixinImageUrl"),result.data);
+                    $("#timediv").show();
+                    timecount();
+                }
+            }
+
+
+        })
+
+
+
+    }
+
+    function queryPayStatus(){
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8888/queryPayStatus",
+            dataType:"json",
+            success:function(result){
+                if(result.code==513){
+                    location.href="login.html";
+                }
+                if(result.code==200){
+                    sessionStorage.setItem("outtradeno",result.data);
+                    location.href="success.html";
+                }
+                if(result.code==123456){
+                    alert(result.message);
+                }
+            }
+
+
+        })
+    }
+
+   var timeout1;
+    var timeout2;
+    function timecount(){
+
+        timeout1=setInterval(function(){
+            var abc= $("#timespan2").html();
+             abc--;
+           $("#timespan2").html(abc);
+           if(abc==0){
+               clearInterval(timeout1);
+               clearInterval(timeout2);
+               $("#timediv").hide();
+           }
+
+       },1000)
+
+        timeout2=setInterval(function(){
+            queryPayStatus();
+        },3000)
+    }
+</script>
+
+
+
+
+
+</html>

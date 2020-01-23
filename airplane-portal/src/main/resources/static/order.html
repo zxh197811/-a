@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<link href="DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="DataTables/js/jquery.dataTables.js"></script>
+<body>
+<div id="updatediv">
+    <form class="form-horizontal" id="updateform">
+        <input type="hidden" id="updateid">
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div  class="col-sm-4"><b><font size="5">航班信息</font></b></div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">航班：</label>
+            <div class="col-sm-8" id="planename">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">起飞时间：</label>
+            <div class="col-sm-8" id="starttimestr">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">到达时间：</label>
+            <div class="col-sm-8" id="endtimestr">
+            </div>
+        </div>
+        <div class="form-group" id="updatejobdiv">
+            <label  class="col-sm-4 control-label">乘机人：</label>
+            <div class="col-sm-4" id="infodiv">
+            </div>
+        </div>
+        <div class="form-group">
+            <center>总人数：<span id="person"></span>,总票价：<span id="totalprice"></span></center>
+        </div>
+        <div style="margin-left:600px">
+            <button type="button" onclick="location.href='pay.html'" class="btn btn-danger">
+                <span class="glyphicon glyphicon-plus"></span>去付款
+            </button>
+        </div>
+    </form>
+
+</div>
+</body>
+<script src="common.js"></script>
+<script>
+    $(function(){
+        selectOrderById();
+    })
+function selectOrderById(){
+    $.ajax({
+        dataType:"json",
+        type:"post",
+        url:"http://localhost:8888/selectOrderById",
+        success:function(data){
+            if(data.code==200){
+                $("#person").html(data.data.totalcount);
+                $("#totalprice").html(data.data.totalprice);
+                selectFlightById(data.data.flightid);
+                selectOrderItem(data.data.id);
+            }else{
+                alert("添加失败");
+            }
+        }
+    })
+}
+
+
+
+
+
+
+
+function selectFlightById(id){
+    $.ajax({
+        dataType:"json",
+        type:"post",
+        data:{id:id},
+        url:"http://localhost:8888/selectFlightById",
+        success:function(data){
+            if(data.code==200){
+                var airplane=data.data;
+                $("#planename").html(airplane.planename);
+                $("#starttimestr").html(airplane.starttimestr);
+                $("#endtimestr").html(airplane.endtimestr);
+                $("#updateid").val(airplane.id);
+            }else{
+                alert("添加失败");
+            }
+        }
+    })
+}
+function selectOrderItem(id){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            data:{id:id},
+            url:"http://localhost:8888/selectOrderItem",
+            success:function(data){
+                if(data.code==200){
+                var str="";
+                    for (var i = 0; i < data.data.length; i++) {
+                 str+="票型："+data.data[i].tickettype+",票价："+data.data[i].price
+                        +",乘机人："+data.data[i].realname+",身份证："+data.data[i].idcard+"\n";
+                    }
+               $("#infodiv").html(str);
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+
+
+
+
+
+</script>
+</html>
