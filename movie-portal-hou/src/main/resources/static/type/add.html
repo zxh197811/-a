@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<link href="/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="/DataTables/js/jquery.dataTables.js"></script>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        新增电影类型
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="selectform" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地区名称:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="padding-left:600px">
+                        <button type="button" onclick="addType()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>类型添加
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-refresh"></span>重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+
+
+
+
+
+
+
+
+<script>
+
+
+
+    function addType(){
+                    var d={};
+                    d.name =$("[name=name]").val();
+                    $.ajax({
+                        data:d,
+                        dataType:"json",
+                        type:"post",
+                        url:"http://localhost:8888/addType",
+                        success:function(data){
+                            if(data.code==200){
+                                alert("添加成功");
+                                location.href="index.html";
+                            }else{
+                                alert("添加失败");
+                            }
+                        }
+                    })
+
+
+
+    }
+
+
+</script>
+
+
+
+
+
+
+
+
+</html>
