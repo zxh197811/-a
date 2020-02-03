@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/ztree/js/jquery.ztree.all.min.js"></script>
+<link href="/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+<link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<body>
+
+
+<div>
+    <ul id="ztree" class="ztree" ></ul>
+</div>
+<button class="btn btn-primary" onclick="addPermission()">权限添加</button>
+<button class="btn btn-primary" onclick="hx()">修改</button>
+<button class="btn btn-primary" onclick="deletePermission()">删除</button>
+
+<div id="adddiv" style="display:none">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">上级名称：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="addparentname" readonly/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">权限名称：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="addname"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">权限类型:</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="addtype" value="1"/>菜单
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="addtype" value="0"/>按钮
+                </label>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">权限Url：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="addurl"/>
+            </div>
+        </div>
+
+
+
+
+
+    </form>
+
+</div>
+
+<div id="updatediv" style="display:none">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">上级名称：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="updateparentname" readonly/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">权限名称：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="updatename"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">权限类型:</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="updatetype" value="1"/>菜单
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="updatetype" value="0"/>按钮
+                </label>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label  class="col-sm-4 control-label">权限Url：</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="updateurl"/>
+            </div>
+        </div>
+
+
+
+
+
+    </form>
+
+</div>
+
+
+
+
+</body>
+<!-- 删除面板 -->
+<script>
+    function deletePermission(){
+        var selectedNodes=ztreeObj.getSelectedNodes();
+        if(selectedNodes.length>0){
+                var selectNode=selectedNodes[0];
+                var arr=ztreeObj.transformToArray(selectNode);
+                var idarr=[];
+                for(var i=0;i<arr.length;i++){
+                    idarr.push(arr[i].id);
+                }
+            bootbox.confirm({
+                title:"<b><font color='red'>删除提示</font></b>",
+                message:"您确定要删除吗",
+                buttons:{
+                    confirm:{
+                        label:"确定",
+                        className:"btn btn-primary"
+                    },
+                    cancel:{
+                        label:"取消",
+                        className:"btn btn-danger"
+                    }
+                },
+                callback:function(data){
+                    if(data){
+                        $.ajax({
+                            data:{"ids":idarr},
+                            type:"post",
+                            url:"http://localhost:8888/deleteAllPermission",
+                            dataType:"json",
+                            success:function(data){
+                                if(data.code=200){
+                                    ztreeObj.removeNode(selectNode);
+                                }else{
+                                    alert("删除失败");
+                                }
+                            }
+
+                        })
+
+
+
+                    }
+                }
+
+
+            })
+
+        }else{
+            alert("请先选择节点");
+        }
+    }
+
+
+
+</script>
+
+<!--修改面板 -->
+<script>
+    var updateform=$("#updatediv").html();
+    function hx(){
+       var selectedNodes=ztreeObj.getSelectedNodes();
+       if(selectedNodes.length>0){
+                  var selectNode=selectedNodes[0];
+           $.ajax({
+               data:{"id":selectNode.id},
+               type:"post",
+               dataType:"json",
+               url:"http://localhost:8888/selectPermissionById",
+                success:function(data){
+                   if(data.code==200){
+                        $("[name=updateparentname]").val(selectNode.getParentNode().name);
+                        $("[name=updatename]").val(data.data.name);
+                        $("[name=updatetype][value="+data.data.type+"]").prop("checked",true);
+                        $("[name=updateurl]").val(data.data.url);
+                   }else{
+                       alert("查询失败");
+                   }
+                }
+           })
+
+           bootbox.confirm({
+               title:"<b><font color='red'>修改提示</font></b>",
+               message:$("#updatediv").children(),
+               buttons:{
+                   confirm:{
+                       label:"确定",
+                       className:"btn btn-primary"
+                   },
+                   cancel:{
+                       label:"取消",
+                       className:"btn btn-danger"
+                   }
+               },
+               callback:function(data){
+                   if(data){
+                       var d={};
+                       d.name=$("[name=updatename]").val();
+                       d.url=$("[name=updateurl]").val();
+                       d.type=$("[name=updatetype]:checked").val();
+                       d.id=selectNode.id;
+                       $.ajax({
+                           data:d,
+                           type:"post",
+                           url:"http://localhost:8888/updatePermission",
+                           dataType:"json",
+                           success:function(data){
+                               if(data.code==200){
+                                   selectNode.id=data.data.id;
+                                   selectNode.name=data.data.name;
+                                   selectNode.url=data.data.url;
+                                   selectNode.type=data.data.type;
+                                   ztreeObj.updateNode(selectNode);
+                               }else{
+                                   alert("修改失败");
+                               }
+                           }
+
+                       })
+
+
+
+                   }
+                   $("#updatediv").html(updateform);
+               }
+
+
+           })
+
+
+
+
+       }else{
+           alert("请先选择节点");
+       }
+
+
+
+    }
+    
+    
+    
+    
+</script>
+
+
+<!-- 添加面板 -->
+<script>
+    var addform=$("#adddiv").html();
+    function addPermission(){
+             var selectedNodes=ztreeObj.getSelectedNodes();
+             if(selectedNodes.length>0){
+                     var selectedNode=selectedNodes[0];
+                     $("[name=addparentname]").val(selectedNode.name);
+                     bootbox.confirm({
+                         title:"<b><font color='red'>添加提示</font></b>",
+                         message:$("#adddiv").children(),
+                         buttons:{
+                             confirm:{
+                                 label:"确定",
+                                 className:"btn btn-primary"
+                             },
+                             cancel:{
+                                 label:"取消",
+                                 className:"btn btn-danger"
+                             }
+                         },
+                         callback:function(data){
+                             if(data){
+                                 var d={};
+                               d.name=$("[name=addname]").val();
+                               d.url=$("[name=addurl]").val();
+                               d.pid=selectedNode.id;
+                               d.type=$("[name=addtype]:checked").val();
+                              $.ajax({
+                                  data:d,
+                                  type:"post",
+                                  url:"http://localhost:8888/addPermission",
+                                  dataType:"json",
+                                  success:function(data){
+                                      if(data.code==200){
+                                          var node={"name":data.data.name,"id":data.data.id,"pId":data.data.pid};
+                                          ztreeObj.addNodes(selectedNode,0,node);
+                                      }else{
+                                          alert("添加失败");
+                                      }
+                                  }
+
+                              })
+
+
+
+                             }
+                             $("#adddiv").html(addform);
+                         }
+
+
+                     })
+
+             }else{
+                 alert("请先选择节点");
+             }
+
+
+
+    }
+
+
+
+</script>
+
+<!-- 查询面板 -->
+<script>
+    var ztreeObj;
+    var setting={
+                data:{
+                    simpleData:{
+                        enable:true,
+                        pIdKey:"pid",
+                        idKey:"id"
+                    }
+                }
+
+    };
+
+    $(function(){
+        initztree();
+    })
+
+    function initztree(){
+        $.ajax({
+            dataType:"json",
+            url:"http://localhost:8888/selectPermission",
+            success:function(data){
+                if(data.code==200){
+                    for(var i=0;i<data.data.length;i++){
+                        data.data[i].url=null;
+                    }
+                    ztreeObj=$.fn.zTree.init($("#ztree"),setting,data.data);
+                }else{
+                    alert("查询失败");
+                }
+            }
+
+        })
+
+
+
+    }
+
+</script>
+</html>

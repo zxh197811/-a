@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<link href="/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="/DataTables/js/jquery.dataTables.js"></script>
+<link href="/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="/bootstrap-fileinput/js/locales/zh.js"></script>
+<link href="/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
+<script src="/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        新增用户
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="selectform" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户名称:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">密码:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">确认密码:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="confirmpassword">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">真实姓名:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="realname">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">部门:</label>
+                            <div class="col-sm-9">
+                                <select id="deptid" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">性别:</label>
+                            <div class="col-sm-9">
+                                <input type="radio" name="sex" value="0">男
+                                <input type="radio" name="sex" value="1">女
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">手机号:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="phonenumber">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">邮箱:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="email">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户头像:</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" name="filename">
+                                <input type="file" class="form-control" name="image" id="image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">出生日期:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="birthday">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">角色:</label>
+                            <div class="col-sm-9" id="rolediv">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="padding-left:600px">
+                        <button type="button" onclick="addUser()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>添加
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-refresh"></span>重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+
+
+
+
+
+
+
+
+<script>
+    $(function(){
+        initselect();
+        initfileinput("image");
+        initdate("birthday",1);
+    })
+    function initselect(){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectdept",
+            success:function(data){
+                if(data.code==200){
+                    var typehtml="<option value=''>-请选择-</option>";
+                    for(var i=0;i<data.data.length;i++){
+                        typehtml+="<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+                    }
+                    $("#deptid").html(typehtml);
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/roleselect",
+            success:function(data){
+                if(data.code==200){
+                    var areahtml="";
+                    for(var i=0;i<data.data.length;i++){
+                        areahtml+="<label class='checkbox-inline'>" +
+                            "<input type='checkbox' name='role' value='"+data.data[i].id+"'>"+data.data[i].name+"</label>";
+                    }
+                    $("#rolediv").html(areahtml);
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+    function initfileinput(a) {
+        $("#" + a).fileinput({
+            language: "zh",
+            allowedPreviewTypes: ["image"],
+            allowedFileTypes: ["image"],
+            uploadUrl: "http://localhost:8888/uploadUserImage",
+        })
+        $("#" + a).on("fileuploaded", function (b, c) {
+            var data = c.response;
+            if (data.code == 200) {
+                alert("上传成功");
+                $("[name=filename]").val(data.data);
+            }
+        })
+    }
+    function initdate(a,b){
+        $("[name="+a+"]").datetimepicker({
+            format:b==undefined?"YYYY-MM-DD HH:mm:ss":"YYYY-MM-DD",
+            locale:"zh-CN",
+            showClear:true
+        })
+    }
+
+    function addUser(){
+                  var password=$("[name=password]").val();
+                  if(password==""){
+                      return;
+                  }
+                  var confirmpassword=$("[name=confirmpassword]").val();
+                  if(confirmpassword==""){
+                      return;
+                  }
+                  if(confirmpassword!=password){
+                      return;
+                  }
+                    var d={};
+                    d.name =$("[name=name]").val();
+                    d.password =password;
+                    d.realname =$("[name=realname]").val();
+                    d.deptid =$("#deptid").val();
+                    d.sex =$("[name=sex]:checked").val();
+                    d.phonenumber =$("[name=phonenumber]").val();
+                    d.email =$("[name=email]").val();
+                    d.filename =$("[name=filename]").val();
+                    d.birthday =$("[name=birthday]").val();
+                    var rolearr=[];
+                    $("[name=role]:checked").each(function(){
+                        rolearr.push(this.value);
+                    })
+                     if(rolearr.length>0){
+                        d.roleids=rolearr.join(",");
+                     }
+                    $.ajax({
+                        data:d,
+                        dataType:"json",
+                        type:"post",
+                        url:"http://localhost:8888/addUser",
+                        success:function(data){
+                            if(data.code==200){
+                                alert("添加成功");
+                                location.href="index.html";
+                            }else{
+                                alert("添加失败");
+                            }
+                        }
+                    })
+
+
+
+    }
+
+
+</script>
+
+
+
+
+
+
+
+
+</html>
