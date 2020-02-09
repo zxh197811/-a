@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="/bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="/bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<link href="/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="/DataTables/js/jquery.dataTables.js"></script>
+<link href="/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="/bootstrap-fileinput/js/locales/zh.js"></script>
+<link href="/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
+<script src="/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        修改商品
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="selectform" method="post">
+            <input type="hidden" id="updateid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户名称:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="name" oninput="selectname(this)">
+                                <span id="namespan"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">价格:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="price">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">销量:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="sales">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">条形码:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="barcode" oninput="selectbarcode(this)">
+                                <span id="barcodespan"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">库存:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="stock">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">商品图片:</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" name="filename">
+                                <input type="file" class="form-control" name="image" id="image">
+                                <img id="updateimg" width="50px" height="50px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">生产日期:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="producedDate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">保质期:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="shelflife">个月
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">产地:</label>
+                            <div class="col-sm-9" id="areadiv">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">状态:</label>
+                            <div class="col-sm-9">
+                                <input type="radio" name="status" value="0">上架
+                                <input type="radio" name="status" value="1">下架
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="padding-left:600px">
+                        <button type="button" onclick="update()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>修改
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-refresh"></span>重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+$(function(){
+    hx();
+})
+function initdate(a,b){
+    $("[name="+a+"]").datetimepicker({
+        format:b==undefined?"YYYY-MM-DD HH:mm:ss":"YYYY-MM-DD",
+        locale:"zh-CN",
+        showClear:true
+    })
+}
+function initfileinput(a) {
+    $("#" + a).fileinput({
+        language: "zh",
+        allowedPreviewTypes: ["image"],
+        allowedFileTypes: ["image"],
+        uploadUrl: "http://localhost:8888/uploadGoodsImage",
+    })
+    $("#" + a).on("fileuploaded", function (b, c) {
+        var data = c.response;
+        if (data.code == 200) {
+            alert("上传成功");
+            $("[name=filename]").val(data.data);
+            $("#updateimg").attr("src",data.data);
+        }
+    })
+}
+function erji(obj){
+    var lavel;
+    if(obj){
+        $(obj).nextAll().remove();
+        lavel=$(obj).prevAll().length;
+    }
+    if(lavel!=undefined&&lavel>0){
+        return;
+    }
+    $.ajax({
+        data: {"pid": obj.value},
+        dataType: "json",
+        url: "http://localhost:8888/selectAreaByPid",
+        async:false,
+        success: function (data) {
+            if (data.code == 200) {
+                var arealist=data.data;
+                var selecthtml="<select class='form-control' onchange='erji(this)'><option value=''>-请选择-</option>";
+                for (var i = 0; i < arealist.length; i++) {
+                    selecthtml+="<option value='"+arealist[i].id+"'>"+arealist[i].name+"</option>";
+                }
+                selecthtml+="</select>";
+                $("#areadiv").append(selecthtml);
+            }
+
+        }
+    })
+
+}
+    function hx(){
+        var o={value:1};
+        initfileinput("image");
+        erji(o);
+        initdate("producedDate");
+        var hrefstr=location.href;
+        var token=hrefstr.substring(hrefstr.lastIndexOf("=")+1);
+        $.ajax({
+            dataType: "json",
+            url: "http://localhost:8888/selectGoodsById",
+            data:{token:token},
+            success: function (data) {
+                if (data.code==200) {
+                    var user=data.data;
+                    $("#updateid").val(user.id);
+                    $("[name=name]").val(user.name);
+                    $("[name=price]").val(user.price);
+                    $("[name=sales]").val(user.sales);
+                    $("[name=barcode]").val(user.barcode);
+                    $("[name=stock]").val(user.stock);
+                    $("[name=filename]").val(user.filename);
+                    var p={value:user.areaid2};
+                    erji(p);
+                    $("#areadiv select").eq(0).val(user.areaid2);
+                    $("#areadiv select").eq(1).val(user.areaid);
+                    $("[name=shelflife]").val(user.shelflife);
+                    $("[name=status][value="+user.status+"]").prop("checked",true);
+                    $("[name=producedDate]").val(user.producedDate);
+                    $("#updateimg").attr("src",user.filename);
+                }
+            }
+        })
+
+    }
+
+
+    function update(){
+        var names=$("#namespan").html();
+        if(names!=""){
+            alert("商品名不能重复");
+            return;
+        }
+        var barcodes=$("#barcodespan").html();
+        if(barcodes!=""){
+            alert("条形码不能重复");
+            return;
+        }
+        var d={};
+        d.id=$("#updateid").val();
+        d.name =$("[name=name]").val();
+        d.price =$("[name=price]").val();
+        d.sales =$("[name=sales]").val();
+        d.barcode =$("[name=barcode]").val();
+        d.stock =$("[name=stock]").val();
+        d.filename =$("[name=filename]").val();
+        d.producedDate =$("[name=producedDate]").val();
+        d.shelflife =$("[name=shelflife]").val();
+        d.status =$("[name=status]:checked").val();
+        d.areaid =$("#areadiv select").eq(1).val();
+                    $.ajax({
+                        data:d,
+                        dataType:"json",
+                        type:"post",
+                        url:"http://localhost:8888/updateGoods",
+                        success:function(data){
+                            if(data.code==200){
+                                alert("修改成功");
+                                location.href="index.html";
+                            }else{
+                                alert("修改失败");
+                            }
+                        }
+                    })
+
+
+
+    }
+
+function selectname(obj){
+    if(obj.value==""){
+        return;
+    }
+    $.ajax({
+        data:{"name":obj.value},
+        dataType:"json",
+        type:"post",
+        url:"http://localhost:8888/selectGoodsByName",
+        success:function(data){
+            if(data.code==200){
+                if(data.data==1){
+                    $("#namespan").html("");
+                }else if(data.data==2){
+                    $("#namespan").html("该商品名已存在");
+                }
+
+            }else{
+                alert("添加失败");
+            }
+        }
+    })
+}
+
+function selectbarcode(obj){
+    if(obj.value==""){
+        return;
+    }
+    $.ajax({
+        data:{"barcode":obj.value},
+        dataType:"json",
+        type:"post",
+        url:"http://localhost:8888/selectGoodsByBarcode",
+        success:function(data){
+            if(data.code==200){
+                if(data.data==1){
+                    $("#barcodespan").html("");
+                }else if(data.data==2){
+                    $("#barcodespan").html("该条形码已存在");
+                }
+
+            }else{
+                alert("添加失败");
+            }
+        }
+    })
+}
+
+
+
+</script>
+
+
+
+
+
+</html>

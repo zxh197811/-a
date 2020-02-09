@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="bootstrap-3.4.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="bootstrap-3.4.1-dist/js/jquery-3.3.1.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootstrap.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.min.js"></script>
+<script src="bootstrap-3.4.1-dist/js/bootbox.locales.min.js"></script>
+<link href="DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="DataTables/js/jquery.dataTables.js"></script>
+<link href="bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="bootstrap-fileinput/js/locales/zh.js"></script>
+<link href="bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="bootstrap-datetimepicker/js/moment-with-locales.js"></script>
+<script src="bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        新增电影
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" id="selectform" method="post">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电影名称:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">评分:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="grade">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">时长:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="mins">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">是否热映:</label>
+                            <div class="col-sm-9">
+                                <input type="radio" name="ishot" value="0">是
+                                <input type="radio" name="ishot" value="1">否
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电影类型:</label>
+                            <div class="col-sm-9" id="typediv">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电影地区:</label>
+                            <div class="col-sm-9" id="areadiv">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电影主图:</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" id="filename">
+                                <input type="file" class="form-control" name="image" id="image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">上映时间:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="showtime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电影介绍:</label>
+                            <div class="col-sm-9">
+                                <textarea name="introduce" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <div class="row">
+                    <div style="padding-left:600px">
+                        <button type="button" onclick="addMovie()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>添加
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-refresh"></span>重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+
+
+
+
+
+
+
+
+<script>
+    $(function(){
+        initselect();
+        initdate("showtime",1);
+        initfileinput("image");
+    })
+
+    function initfileinput(a) {
+        $("#" + a).fileinput({
+            language: "zh",
+            allowedPreviewTypes: ["image"],
+            allowedFileTypes: ["image"],
+            uploadUrl: "http://localhost:8888/uploadimage",
+        })
+        $("#" + a).on("fileuploaded", function (b, c) {
+            var data = c.response;
+            if (data.code == 200) {
+                alert("上传成功");
+                $("#filename").val(data.data);
+            }
+        })
+    }
+        function initselect(){
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectType",
+            success:function(data){
+                if(data.code==200){
+                    var typehtml="";
+                    for(var i=0;i<data.data.length;i++){
+                        typehtml+="<label class='checkbox-inline'>" +
+                            "<input type='checkbox' name='typeid' value='"+data.data[i].id+"'>"+data.data[i].name+"</label>";
+                    }
+                    $("#typediv").html(typehtml);
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+        $.ajax({
+            dataType:"json",
+            type:"post",
+            url:"http://localhost:8888/selectArea",
+            success:function(data){
+                if(data.code==200){
+                    debugger;
+                    var areahtml="";
+                    for(var i=0;i<data.data.length;i++){
+                        areahtml+="<label class='checkbox-inline'>" +
+                            "<input type='checkbox' name='areaid' value='"+data.data[i].id+"'>"+data.data[i].name+"</label>";
+                    }
+                    $("#areadiv").html(areahtml);
+                }else{
+                    alert("添加失败");
+                }
+            }
+        })
+    }
+
+    function initdate(a,b){
+        $("[name="+a+"]").datetimepicker({
+            format:b==undefined?"YYYY-MM-DD HH:mm:ss":"YYYY-MM-DD",
+            locale:"zh-CN",
+            showClear:true
+        })
+    }
+
+    function addMovie(){
+                    var d={};
+                    d.name =$("[name=name]").val();
+                    d.grade=$("[name=grade]").val();
+                    d.mins=$("[name=mins]").val();
+                    d.ishot=$("[name=ishot]:checked").val();
+                    var typearr=[];
+                    $("[name=typeid]:checked").each(function(){
+                        typearr.push(this.value);
+                    })
+                    d.typeids=typearr.join(",");
+                    var areaarr=[];
+                    $("[name=areaid]:checked").each(function(){
+                        areaarr.push(this.value);
+                    })
+                    d.areaids=areaarr.join(",");
+                    d.mainimage=$("#filename").val();
+                    d.showtime=$("[name=showtime]").val();
+                    d.introduce=$("[name=introduce]").val();
+                    $.ajax({
+                        data:d,
+                        dataType:"json",
+                        type:"post",
+                        url:"http://localhost:8888/addMovie",
+                        success:function(data){
+                            if(data.code==200){
+                                alert("添加成功");
+                                location.href="index.html";
+                            }else{
+                                alert("添加失败");
+                            }
+                        }
+                    })
+
+
+
+    }
+
+
+</script>
+
+
+
+
+
+
+
+
+</html>
